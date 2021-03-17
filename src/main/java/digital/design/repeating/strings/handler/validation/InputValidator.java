@@ -8,8 +8,8 @@ package digital.design.repeating.strings.handler.validation;
 public interface InputValidator {
 
     /**
-     * @param input input,
-     * @throws NullPointerException iff input == null,
+     * @param input input.
+     * @throws NullPointerException iff input == null.
      * @throws IllegalArgumentException iff input is incorrect. Contract is defined by developer.
      */
     void validate(CharSequence input);
