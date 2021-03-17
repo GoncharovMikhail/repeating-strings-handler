@@ -22,7 +22,7 @@ public class DefaultRepeatingStringsHandlerTest {
 
     @Test
     public void singleRepeat() {
-        assertEquals("cabddbddbdd", handler.handle("ca3[b2[d]]"));
+        assertEquals("cab", handler.handle("ca1[b]"));
     }
 
     @Test
@@ -31,7 +31,7 @@ public class DefaultRepeatingStringsHandlerTest {
     }
 
     @Test
-    public void sq() {
-
+    public void longOutput() {
+        assertEquals("abcccccbcccccbcccccbcccccabcccccbcccccbcccccbcccccabcccccbcccccbcccccbccccc", handler.handle("3[a4[b5[c]]]"));
     }
 }

@@ -26,7 +26,7 @@ public class DefaultInputValidator extends AbstractInputValidator {
 
         /* todo Empty string valid(?) */
         if (inputAsString.isBlank()) {
-            return;
+            throw new IllegalArgumentException(INVALID_INPUT + " - input is blank.");
         }
         checkIfContainsIllegalCharacters(this.allowedCharactersAsRegExp, inputAsString);
         checkIfStartsWithOpeningBracket(inputAsString);

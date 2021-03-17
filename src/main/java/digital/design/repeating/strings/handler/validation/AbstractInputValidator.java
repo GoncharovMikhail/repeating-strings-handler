@@ -1,7 +1,10 @@
 package digital.design.repeating.strings.handler.validation;
 
 /**
- * @author Mihovel
+ * A 'builder' class to define allowed symbols as a regular expression.
+ * <p>
+ * P.S. У меня ломбок не работает:( Пишу свои костыли.
+ *
  * @version 1.0
  */
 public abstract class AbstractInputValidator implements InputValidator {

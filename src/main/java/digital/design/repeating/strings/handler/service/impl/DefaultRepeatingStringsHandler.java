@@ -13,34 +13,42 @@ public class DefaultRepeatingStringsHandler extends AbstractRepeatingStringsHand
     public String handle(CharSequence input) {
         handleSettings(input);
 
-        Stack<Integer> count = new Stack<>();
+        Stack<Integer> counts = new Stack<>();
         Stack<String> result = new Stack<>();
         int i = 0;
         result.push("");
         while (i < input.length()) {
             char currentChar = input.charAt(i);
             if (currentChar >= '0' && currentChar <= '9') {
-                int start = i;
-                while (input.charAt(i + 1) >= '0' && input.charAt(i + 1) <= '9') {
-                    i++;
-                }
-                count.push(Integer.parseInt(input.toString().substring(start, i + 1)));
+                onDigitFound(input, i, counts);
             } else if (currentChar == '[') {
                 result.push("");
             } else if (currentChar == ']') {
-                String str = result.pop();
-                StringBuilder tempBuilder = new StringBuilder();
-                int times = count.pop();
-                for (int j = 0; j < times; j++) {
-                    tempBuilder.append(str);
-                }
-                result.push(result.pop() + tempBuilder.toString());
+                onClosingBracketFound(result, counts);
             } else {
                 result.push(result.pop() + currentChar);
             }
             i++;
         }
         return result.pop();
+    }
+
+    private void onDigitFound(CharSequence input, int i, Stack<Integer> counts) {
+        int start = i;
+        while (input.charAt(i + 1) >= '0' && input.charAt(i + 1) <= '9') {
+            i++;
+        }
+        counts.push(Integer.parseInt(input.toString().substring(start, i + 1)));
+    }
+
+    private void onClosingBracketFound(Stack<String> result, Stack<Integer> counts) {
+        String str = result.pop();
+        StringBuilder tempBuilder = new StringBuilder();
+        int times = counts.pop();
+        for (int j = 0; j < times; j++) {
+            tempBuilder.append(str);
+        }
+        result.push(result.pop() + tempBuilder.toString());
     }
 
     private void handleSettings(CharSequence input) {
