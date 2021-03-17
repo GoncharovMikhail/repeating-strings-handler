@@ -6,66 +6,99 @@ import java.util.EmptyStackException;
 import java.util.Objects;
 import java.util.Stack;
 
+import static java.lang.Character.*;
+
 /**
  * @version 1.0
  */
 public class InputValidatorImpl implements InputValidator {
+    private static final String INVALID_INPUT = "Invalid input";
 
-    @SuppressWarnings("ConstantConditions")
     @Override
-    public void validate(String allowedCharactersRegExp, CharSequence input) throws NullPointerException, IllegalArgumentException {
-        Objects.requireNonNull(input, "Invalid input - can't be null");
+    public void validate(String allowedCharactersRegExp, CharSequence input) {
+        Objects.requireNonNull(input, INVALID_INPUT + " - can't be null.");
 
         String inputAsString = input.toString();
 
-        /* Check if input contains illegal characters. */
-        if (!inputAsString.matches(allowedCharactersRegExp)) {
-            throw new IllegalArgumentException("Invalid input - contains illegal characters");
+        /*todo Empty string is valid(?) */
+        if (checkIfEmpty(inputAsString)) {
+            return;
         }
+        checkIfContainsIllegalCharacters(allowedCharactersRegExp, inputAsString);
+        checkIfStartsWithOpeningBracket(inputAsString);
 
         /* Stack, containing only '[' and ']'. */
         Stack<Character> bracketsStack = new Stack<>();
-
-        for (int i = 0; i < inputAsString.length(); i++) {
-            char currentChar = inputAsString.charAt(i);
-
-            if (currentChar == '[') {
-                if (!containsNumberBefore(inputAsString.charAt(i - 1))) {
-                    throw new IllegalArgumentException("Invalid input - no digit before opening bracket, check position");
-                }
-                /* If we find an opening bracket - it should be closed somewhere. Add it to the stack. */
-                bracketsStack.push(currentChar);
-            } else if (currentChar == ']') {
-                /* If bracketsStack is already empty, that means that opening and closing brackets stands in pairs,
-                 * but there is at least one extra closing bracket.
-                 * For example, consider the following strings:
-                 * "[] ]",
-                 * "1[abc]abc ]",
-                 * "1[a1[b1[c]]] ]]]]]".
-                 * Each of them contains at least one extra closing bracket, so, when we'll do bracketsStack.pop(), the
-                 * EmptyStackException will be thrown. */
-                if (bracketsStack.isEmpty()) {
-                    throw new IllegalArgumentException("Invalid input - at least one extra closing bracket", new EmptyStackException());
-                }
-                /* If we find a closing bracket - it closes some opening. Remove an opening bracket from the stack. */
-                bracketsStack.pop();
+        int i = 0;
+        while (i < inputAsString.length()) {
+            if (isDigit(inputAsString.charAt(i))) {
+                countDownTillAnyBracketOrThrowIllegalArgumentException(inputAsString, i);
             }
-            /* If stack isn't empty by the of of looping through input -
-             * it contains at least one extra opening bracket. */
-            if (!bracketsStack.isEmpty()) {
-                throw new IllegalArgumentException("Invalid input - contains " + bracketsStack.size() + "extra brackets.");
+
+            if (inputAsString.charAt(i) == '[') {
+                bracketsStack.push(input.charAt(i));
             }
+            if (input.charAt(i) == ']') {
+                onClosingBracketFound(bracketsStack);
+            }
+            i++;
         }
+        checkIfNoExtraClosingBrackets(bracketsStack);
     }
 
+    //todo как быть с реэкспом?
     /**
      * Method for testing with default regex.
      */
     public void validate(CharSequence input) throws NullPointerException, IllegalArgumentException {
-        validate("[a-zA-Z0-9[]]*", input);
+        validate("[a-zA-Z0-9/[/]]*", input);
     }
 
-    private boolean containsNumberBefore(char characterBeforeOpeningBracket) {
-        return Character.isDigit(characterBeforeOpeningBracket);
+    private void checkIfContainsIllegalCharacters(String allowedCharactersRegExp, String inputAsString) {
+        if (!inputAsString.matches(allowedCharactersRegExp)) {
+            throw new IllegalArgumentException(INVALID_INPUT + " - contains illegal characters.");
+        }
+    }
+
+    private boolean checkIfEmpty(String inputAsString) {
+        return inputAsString.equals("");
+    }
+
+    private void checkIfStartsWithOpeningBracket(String inputAsString) {
+        if (inputAsString.charAt(0) == '[') {
+            throw new IllegalArgumentException(INVALID_INPUT + " - can't start with '['");
+        }
+    }
+
+    private void countDownTillAnyBracketOrThrowIllegalArgumentException(String inputAsString, int i) {
+        while (isDigit(inputAsString.charAt(i))) {
+            i++;
+        }
+        if (inputAsString.charAt(i) != ']' || inputAsString.charAt(i) != '[') {
+            throw new IllegalArgumentException(INVALID_INPUT + " - only brackets can stand after digits");
+        }
+    }
+
+    private void onClosingBracketFound(Stack<Character> bracketsStack) {
+        /* If bracketsStack is already empty, that means that opening and closing brackets stands in pairs,
+         * but there is at least one extra closing bracket.
+         * For example, consider the following strings:
+         * "[] ]",
+         * "1[abc]abc ]",
+         * "1[a1[b1[c]]] ]]]]]".
+         * Each of them contains at least one extra closing bracket, so, when we'll do bracketsStack.pop(), the
+         * EmptyStackException will be thrown. */
+        if (bracketsStack.isEmpty()) {
+            throw new IllegalArgumentException(INVALID_INPUT + " - at least one extra closing bracket", new EmptyStackException());
+        }
+        /* If we find a closing bracket - it closes some opening. Remove an opening bracket from the stack. */
+        bracketsStack.pop();
+    }
+
+    private void checkIfNoExtraClosingBrackets(Stack<Character> bracketsStack) {
+        /* If stack isn't empty by the of of looping through input - it contains at least one extra opening bracket. */
+        if (!bracketsStack.isEmpty()) {
+            throw new IllegalArgumentException(INVALID_INPUT + " - contains " + bracketsStack.size() + "extra brackets.");
+        }
     }
 }
