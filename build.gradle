@@ -5,7 +5,7 @@ plugins {
 group 'digital.design.repeating-strings-handler'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.11
 
 repositories {
     mavenCentral()
@@ -13,12 +13,9 @@ repositories {
 
 ext {
     junitVersion = '4.13.2'
-    lombokVersion = '1.18.18'
 }
 
 dependencies {
-    compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
-
     testImplementation group: 'junit', name: 'junit', version: junitVersion
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }

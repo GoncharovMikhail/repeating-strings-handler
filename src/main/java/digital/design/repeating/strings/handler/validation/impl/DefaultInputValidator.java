@@ -1,30 +1,34 @@
 package digital.design.repeating.strings.handler.validation.impl;
 
-import digital.design.repeating.strings.handler.validation.InputValidator;
+import digital.design.repeating.strings.handler.validation.AbstractInputValidator;
 
 import java.util.EmptyStackException;
 import java.util.Objects;
 import java.util.Stack;
 
-import static java.lang.Character.*;
+import static java.lang.Character.isDigit;
 
 /**
  * @version 1.0
  */
-public class InputValidatorImpl implements InputValidator {
+public class DefaultInputValidator extends AbstractInputValidator {
     private static final String INVALID_INPUT = "Invalid input";
 
+    public DefaultInputValidator(String allowedCharactersAsRegExp) {
+        super(allowedCharactersAsRegExp);
+    }
+
     @Override
-    public void validate(String allowedCharactersRegExp, CharSequence input) {
+    public void validate(CharSequence input) {
         Objects.requireNonNull(input, INVALID_INPUT + " - can't be null.");
 
         String inputAsString = input.toString();
 
-        /*todo Empty string is valid(?) */
-        if (checkIfEmpty(inputAsString)) {
+        /* todo Empty string valid(?) */
+        if (inputAsString.isBlank()) {
             return;
         }
-        checkIfContainsIllegalCharacters(allowedCharactersRegExp, inputAsString);
+        checkIfContainsIllegalCharacters(this.allowedCharactersAsRegExp, inputAsString);
         checkIfStartsWithOpeningBracket(inputAsString);
 
         /* Stack, containing only '[' and ']'. */
@@ -35,33 +39,32 @@ public class InputValidatorImpl implements InputValidator {
                 countDownTillAnyBracketOrThrowIllegalArgumentException(inputAsString, i);
             }
 
+            /* Handling brackets. */
             if (inputAsString.charAt(i) == '[') {
                 bracketsStack.push(input.charAt(i));
             }
             if (input.charAt(i) == ']') {
                 onClosingBracketFound(bracketsStack);
             }
+
             i++;
         }
         checkIfNoExtraClosingBrackets(bracketsStack);
     }
 
-    //todo как быть с реэкспом?
-    /**
-     * Method for testing with default regex.
-     */
-    public void validate(CharSequence input) throws NullPointerException, IllegalArgumentException {
-        validate("[a-zA-Z0-9/[/]]*", input);
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof DefaultInputValidator) {
+            DefaultInputValidator d = (DefaultInputValidator) o;
+            return Objects.equals(d.getAllowedCharactersAsRegExp(), this.allowedCharactersAsRegExp);
+        }
+        return false;
     }
 
     private void checkIfContainsIllegalCharacters(String allowedCharactersRegExp, String inputAsString) {
         if (!inputAsString.matches(allowedCharactersRegExp)) {
             throw new IllegalArgumentException(INVALID_INPUT + " - contains illegal characters.");
         }
-    }
-
-    private boolean checkIfEmpty(String inputAsString) {
-        return inputAsString.equals("");
     }
 
     private void checkIfStartsWithOpeningBracket(String inputAsString) {
@@ -74,7 +77,7 @@ public class InputValidatorImpl implements InputValidator {
         while (isDigit(inputAsString.charAt(i))) {
             i++;
         }
-        if (inputAsString.charAt(i) != ']' || inputAsString.charAt(i) != '[') {
+        if ((inputAsString.charAt(i) != ']') && (inputAsString.charAt(i) != '[')) {
             throw new IllegalArgumentException(INVALID_INPUT + " - only brackets can stand after digits");
         }
     }
@@ -83,9 +86,10 @@ public class InputValidatorImpl implements InputValidator {
         /* If bracketsStack is already empty, that means that opening and closing brackets stands in pairs,
          * but there is at least one extra closing bracket.
          * For example, consider the following strings:
-         * "[] ]",
-         * "1[abc]abc ]",
-         * "1[a1[b1[c]]] ]]]]]".
+         * "1[a]followingBracketIsExtra]",
+         * "1[abc]abc1[abc]followingBracketIsExtra]",
+         * "1[a1[b1[c]]]followingBracketsAreExtras]]]]]".
+         *
          * Each of them contains at least one extra closing bracket, so, when we'll do bracketsStack.pop(), the
          * EmptyStackException will be thrown. */
         if (bracketsStack.isEmpty()) {

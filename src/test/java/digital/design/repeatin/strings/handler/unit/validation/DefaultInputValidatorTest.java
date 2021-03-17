@@ -1,15 +1,15 @@
 package digital.design.repeatin.strings.handler.unit.validation;
 
-import digital.design.repeating.strings.handler.validation.impl.InputValidatorImpl;
+import digital.design.repeating.strings.handler.validation.impl.DefaultInputValidator;
 import org.junit.Test;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.*;
 
 /**
  * @version 1.0
  */
-public class InputValidatorImplTest {
-    private InputValidatorImpl inputValidator = new InputValidatorImpl();
+public class DefaultInputValidatorTest {
+    private final DefaultInputValidator inputValidator = new DefaultInputValidator("[a-zA-Z0-9\\[\\]]*");
 
     /* INVALID INPUTS */
 
@@ -59,8 +59,13 @@ public class InputValidatorImplTest {
     }
 
     @Test
+    public void noDigitsBeforeOpeningBracket() {
+        assertThrows(IllegalArgumentException.class, () -> inputValidator.validate("abc[abc]"));
+    }
+
+    @Test
     public void noNumberBeforeOpeningBracket() {
-        assertThrows(IllegalArgumentException.class, () ->inputValidator.validate("abc[abc]"));
+        assertThrows(IllegalArgumentException.class, () -> inputValidator.validate("abc[abc]"));
     }
 
     /* VALID INPUTS */
@@ -69,4 +74,15 @@ public class InputValidatorImplTest {
     public void emptyStringInput() {
         inputValidator.validate("");
     }
+
+    @Test
+    public void validInputNoBrackets() {
+        inputValidator.validate("abcdefghijklmnopqrstuvwxyABCDEFGHIJKLOMNOPQRSTUVWXUZ");
+    }
+
+    @Test
+    public void easyValidInput() {
+        inputValidator.validate("ab1[c]");
+    }
+
 }
