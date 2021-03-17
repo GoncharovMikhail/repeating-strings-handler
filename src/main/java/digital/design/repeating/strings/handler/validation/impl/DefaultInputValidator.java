@@ -41,7 +41,7 @@ public class DefaultInputValidator extends AbstractInputValidator {
 
             /* Handling brackets. */
             if (inputAsString.charAt(i) == '[') {
-                bracketsStack.push(input.charAt(i));
+                onOpeningBracketFound(inputAsString, i, bracketsStack);
             }
             if (input.charAt(i) == ']') {
                 onClosingBracketFound(bracketsStack);
@@ -80,6 +80,13 @@ public class DefaultInputValidator extends AbstractInputValidator {
         if ((inputAsString.charAt(i) != ']') && (inputAsString.charAt(i) != '[')) {
             throw new IllegalArgumentException(INVALID_INPUT + " - only brackets can stand after digits");
         }
+    }
+
+    private void onOpeningBracketFound(String inputAsString, int i, Stack<Character> bracketsStack) {
+        if (!isDigit(inputAsString.charAt(i - 1))) {
+            throw new IllegalArgumentException(INVALID_INPUT + " - there should be a number before opening bracket.");
+        }
+        bracketsStack.push(inputAsString.charAt(i));
     }
 
     private void onClosingBracketFound(Stack<Character> bracketsStack) {

@@ -64,16 +64,11 @@ public class DefaultInputValidatorTest {
     }
 
     @Test
-    public void noNumberBeforeOpeningBracket() {
-        assertThrows(IllegalArgumentException.class, () -> inputValidator.validate("abc[abc]"));
+    public void emptyStringInput() {
+        assertThrows(IllegalArgumentException.class, () -> inputValidator.validate(""));
     }
 
     /* VALID INPUTS */
-
-    @Test
-    public void emptyStringInput() {
-        inputValidator.validate("");
-    }
 
     @Test
     public void validInputNoBrackets() {
@@ -84,5 +79,4 @@ public class DefaultInputValidatorTest {
     public void easyValidInput() {
         inputValidator.validate("ab1[c]");
     }
-
 }
