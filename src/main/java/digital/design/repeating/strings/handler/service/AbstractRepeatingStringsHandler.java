@@ -1,6 +1,7 @@
 package digital.design.repeating.strings.handler.service;
 
 import digital.design.repeating.strings.handler.validation.AbstractInputValidator;
+import digital.design.repeating.strings.handler.validation.InputValidator;
 import digital.design.repeating.strings.handler.validation.impl.DefaultInputValidator;
 
 /**
@@ -13,7 +14,7 @@ import digital.design.repeating.strings.handler.validation.impl.DefaultInputVali
  */
 public abstract class AbstractRepeatingStringsHandler implements RepeatingStringsHandler {
     protected boolean enableValidation = false;
-    protected AbstractInputValidator validator = new DefaultInputValidator(".*");
+    protected InputValidator validator = new DefaultInputValidator(".*");
 
     /**
      * Call when no addition setting needed.

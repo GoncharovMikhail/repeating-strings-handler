@@ -13,7 +13,9 @@ import static org.junit.Assert.assertEquals;
 public class DefaultRepeatingStringsHandlerTest {
     private final String VALID_SYMBOLS = "[a-zA-Z0-9\\[\\]]*";
     private final RepeatingStringsHandler handler = new DefaultRepeatingStringsHandler()
-        .setValidator(new DefaultInputValidator(VALID_SYMBOLS));
+        /* По условию задачи, строка валидна -> ее не обязательно валидировать.
+         * При задании верифаера, валидацию будет проходить автоматически. */
+        /*.setValidator(new DefaultInputValidator(VALID_SYMBOLS))*/;
 
     @Test
     public void easy() {

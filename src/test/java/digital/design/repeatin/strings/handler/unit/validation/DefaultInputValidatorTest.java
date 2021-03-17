@@ -1,15 +1,16 @@
 package digital.design.repeatin.strings.handler.unit.validation;
 
+import digital.design.repeating.strings.handler.validation.InputValidator;
 import digital.design.repeating.strings.handler.validation.impl.DefaultInputValidator;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThrows;
 
 /**
  * @version 1.0
  */
 public class DefaultInputValidatorTest {
-    private final DefaultInputValidator validator = new DefaultInputValidator("[a-zA-Z0-9\\[\\]]*");
+    private final InputValidator validator = new DefaultInputValidator("[a-zA-Z0-9\\[\\]]*");
 
     /* INVALID INPUTS */
 
