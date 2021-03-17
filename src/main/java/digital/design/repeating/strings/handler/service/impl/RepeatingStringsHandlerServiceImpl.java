@@ -8,8 +8,8 @@ import digital.design.repeating.strings.handler.service.RepeatingStringsHandlerS
 public class RepeatingStringsHandlerServiceImpl implements RepeatingStringsHandlerService {
 
     @Override
-    public CharSequence handle(CharSequence input) {
-        String inputAsString = input.toString();
+    public String handle(CharSequence input) {
+        StringBuilder stringBuilder = new StringBuilder(input);
 
         return null;
     }

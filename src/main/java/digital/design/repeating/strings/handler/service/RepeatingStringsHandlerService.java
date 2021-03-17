@@ -5,5 +5,5 @@ package digital.design.repeating.strings.handler.service;
  */
 public interface RepeatingStringsHandlerService {
 
-    CharSequence handle(CharSequence input);
+    String handle(CharSequence input);
 }

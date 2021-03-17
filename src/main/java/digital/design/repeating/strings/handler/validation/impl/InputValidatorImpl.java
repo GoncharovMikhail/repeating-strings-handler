@@ -30,12 +30,15 @@ public class InputValidatorImpl implements InputValidator {
             char currentChar = inputAsString.charAt(i);
 
             if (currentChar == '[') {
+                if (!containsNumberBefore(inputAsString.charAt(i - 1))) {
+                    throw new IllegalArgumentException("Invalid input - no digit before opening bracket, check position");
+                }
                 /* If we find an opening bracket - it should be closed somewhere. Add it to the stack. */
                 bracketsStack.push(currentChar);
             } else if (currentChar == ']') {
                 /* If bracketsStack is already empty, that means that opening and closing brackets stands in pairs,
                  * but there is at least one extra closing bracket.
-                 * For example, consider the following Strings:
+                 * For example, consider the following strings:
                  * "[] ]",
                  * "1[abc]abc ]",
                  * "1[a1[b1[c]]] ]]]]]".
@@ -55,7 +58,14 @@ public class InputValidatorImpl implements InputValidator {
         }
     }
 
+    /**
+     * Method for testing with default regex.
+     */
     public void validate(CharSequence input) throws NullPointerException, IllegalArgumentException {
-        validate("[a-zA-Z0-9[]]", input);
+        validate("[a-zA-Z0-9[]]*", input);
+    }
+
+    private boolean containsNumberBefore(char characterBeforeOpeningBracket) {
+        return Character.isDigit(characterBeforeOpeningBracket);
     }
 }
