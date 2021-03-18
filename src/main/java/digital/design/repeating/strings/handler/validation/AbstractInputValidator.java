@@ -8,13 +8,17 @@ package digital.design.repeating.strings.handler.validation;
  * @version 1.0
  */
 public abstract class AbstractInputValidator implements InputValidator {
-    protected final String allowedCharactersAsRegExp;
+    private String allowedCharactersAsRegExp;
+
+    protected AbstractInputValidator() {
+        this.allowedCharactersAsRegExp = ".*";
+    }
 
     protected AbstractInputValidator(String allowedCharactersAsRegExp) {
         this.allowedCharactersAsRegExp = allowedCharactersAsRegExp;
     }
 
-    protected String getAllowedCharactersAsRegExp() {
+    public String getAllowedCharactersAsRegExp() {
         return allowedCharactersAsRegExp;
     }
 }

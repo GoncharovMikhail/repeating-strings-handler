@@ -10,7 +10,8 @@ import static org.junit.Assert.assertThrows;
  * @version 1.0
  */
 public class DefaultInputValidatorTest {
-    private final InputValidator validator = new DefaultInputValidator("[a-zA-Z0-9\\[\\]]*");
+    private final String VALID_CHARACTERS = "[a-zA-Z0-9\\[\\]]*";
+    private final InputValidator validator = new DefaultInputValidator(VALID_CHARACTERS);
 
     /* INVALID INPUTS */
 

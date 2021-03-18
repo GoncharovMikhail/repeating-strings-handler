@@ -13,13 +13,15 @@ import digital.design.repeating.strings.handler.validation.impl.DefaultInputVali
  * @version 1.0
  */
 public abstract class AbstractRepeatingStringsHandler implements RepeatingStringsHandler {
-    protected boolean enableValidation = false;
-    protected InputValidator validator = new DefaultInputValidator(".*");
+    protected boolean enableValidation;
+    protected InputValidator validator;
 
     /**
      * Call when no addition setting needed.
      */
     protected AbstractRepeatingStringsHandler() {
+        enableValidation = false;
+        validator = new DefaultInputValidator();
     }
 
     /**

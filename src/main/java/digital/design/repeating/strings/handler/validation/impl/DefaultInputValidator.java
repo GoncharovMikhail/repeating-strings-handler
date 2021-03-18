@@ -14,6 +14,10 @@ import static java.lang.Character.isDigit;
 public class DefaultInputValidator extends AbstractInputValidator {
     private static final String INVALID_INPUT = "Invalid input";
 
+    public DefaultInputValidator() {
+        super();
+    }
+
     public DefaultInputValidator(String allowedCharactersAsRegExp) {
         super(allowedCharactersAsRegExp);
     }
@@ -28,7 +32,7 @@ public class DefaultInputValidator extends AbstractInputValidator {
         if (inputAsString.isBlank()) {
             throw new IllegalArgumentException(INVALID_INPUT + " - input is blank.");
         }
-        checkIfContainsIllegalCharacters(this.allowedCharactersAsRegExp, inputAsString);
+        checkIfContainsIllegalCharacters(this.getAllowedCharactersAsRegExp(), inputAsString);
         checkIfStartsWithOpeningBracket(inputAsString);
 
         /* Stack, containing only '[' and ']'. */
@@ -56,7 +60,7 @@ public class DefaultInputValidator extends AbstractInputValidator {
     public boolean equals(Object o) {
         if (o instanceof DefaultInputValidator) {
             DefaultInputValidator d = (DefaultInputValidator) o;
-            return Objects.equals(d.getAllowedCharactersAsRegExp(), this.allowedCharactersAsRegExp);
+            return Objects.equals(d.getAllowedCharactersAsRegExp(), this.getAllowedCharactersAsRegExp());
         }
         return false;
     }
