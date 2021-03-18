@@ -1,6 +1,8 @@
 package digital.design.repeating.strings.handler.validation.impl;
 
 import digital.design.repeating.strings.handler.validation.AbstractInputValidator;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.EmptyStackException;
 import java.util.Objects;
@@ -11,16 +13,10 @@ import static java.lang.Character.isDigit;
 /**
  * @version 1.0
  */
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class DefaultInputValidator extends AbstractInputValidator {
     private static final String INVALID_INPUT = "Invalid input";
-
-    public DefaultInputValidator() {
-        super();
-    }
-
-    public DefaultInputValidator(String allowedCharactersAsRegExp) {
-        super(allowedCharactersAsRegExp);
-    }
 
     @Override
     public void validate(CharSequence input) {
@@ -32,7 +28,7 @@ public class DefaultInputValidator extends AbstractInputValidator {
         if (inputAsString.isBlank()) {
             throw new IllegalArgumentException(INVALID_INPUT + " - input is blank.");
         }
-        checkIfContainsIllegalCharacters(this.getAllowedCharactersAsRegExp(), inputAsString);
+        checkIfContainsIllegalCharacters(this.allowedCharactersAsRegexp, inputAsString);
         checkIfStartsWithOpeningBracket(inputAsString);
 
         /* Stack, containing only '[' and ']'. */
@@ -47,22 +43,13 @@ public class DefaultInputValidator extends AbstractInputValidator {
             if (inputAsString.charAt(i) == '[') {
                 onOpeningBracketFound(inputAsString, i, bracketsStack);
             }
-            if (input.charAt(i) == ']') {
+            if (inputAsString.charAt(i) == ']') {
                 onClosingBracketFound(bracketsStack);
             }
 
             i++;
         }
         checkIfNoExtraClosingBrackets(bracketsStack);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof DefaultInputValidator) {
-            DefaultInputValidator d = (DefaultInputValidator) o;
-            return Objects.equals(d.getAllowedCharactersAsRegExp(), this.getAllowedCharactersAsRegExp());
-        }
-        return false;
     }
 
     private void checkIfContainsIllegalCharacters(String allowedCharactersRegExp, String inputAsString) {

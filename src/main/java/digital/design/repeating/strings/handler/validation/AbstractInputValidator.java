@@ -1,24 +1,20 @@
 package digital.design.repeating.strings.handler.validation;
 
+import lombok.NoArgsConstructor;
+
 /**
- * A 'builder' class to define allowed symbols as a regular expression.
- * <p>
- * P.S. У меня ломбок не работает:( Пишу свои костыли.
- *
  * @version 1.0
  */
+@NoArgsConstructor
 public abstract class AbstractInputValidator implements InputValidator {
-    private String allowedCharactersAsRegExp;
+    /**
+     * By default, all characters are allowed.
+     */
+    protected String allowedCharactersAsRegexp = ".*";
 
-    protected AbstractInputValidator() {
-        this.allowedCharactersAsRegExp = ".*";
-    }
-
-    protected AbstractInputValidator(String allowedCharactersAsRegExp) {
-        this.allowedCharactersAsRegExp = allowedCharactersAsRegExp;
-    }
-
-    public String getAllowedCharactersAsRegExp() {
-        return allowedCharactersAsRegExp;
+    @Override
+    public InputValidator setAllowedCharactersAsRegExp(String allowedCharactersAsRegExp) {
+        this.allowedCharactersAsRegexp = allowedCharactersAsRegExp;
+        return this;
     }
 }

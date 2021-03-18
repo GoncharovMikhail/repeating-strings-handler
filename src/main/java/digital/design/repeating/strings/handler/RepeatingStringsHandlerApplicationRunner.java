@@ -2,6 +2,7 @@ package digital.design.repeating.strings.handler;
 
 import digital.design.repeating.strings.handler.service.RepeatingStringsHandler;
 import digital.design.repeating.strings.handler.service.impl.DefaultRepeatingStringsHandler;
+import digital.design.repeating.strings.handler.validation.impl.DefaultInputValidator;
 
 /**
  * @version 1.0
@@ -9,7 +10,8 @@ import digital.design.repeating.strings.handler.service.impl.DefaultRepeatingStr
 public class RepeatingStringsHandlerApplicationRunner {
 
     public static void main(String[] args) {
-        RepeatingStringsHandler handler = new DefaultRepeatingStringsHandler();
+        RepeatingStringsHandler handler = new DefaultRepeatingStringsHandler()
+            .setValidator(new DefaultInputValidator());
 
         String handled = handler.handle("inputStringHere");
     }

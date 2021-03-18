@@ -11,12 +11,13 @@ import static org.junit.Assert.assertEquals;
  * @version 1.0
  */
 public class DefaultRepeatingStringsHandlerTest {
-    private final String VALID_CHARACTERS = "[a-zA-Z0-9\\[\\]]*";
+    private final String ALLOWED_CHARACTERS = "[a-zA-Z0-9\\[\\]]*";
 
     private final RepeatingStringsHandler handler = new DefaultRepeatingStringsHandler()
         /* По условию задачи, строка валидна -> ее не обязательно валидировать.
          * При задании верифаера, валидацию будет проходить автоматически. */
-        /*.setValidator(new DefaultInputValidator(VALID_CHARACTERS))*/;
+        /*.setValidator(new DefaultInputValidator().setAllowedCharactersAsRegExp(ALLOWED_CHARACTERS))*/
+    ;
 
     @Test
     public void easy() {
