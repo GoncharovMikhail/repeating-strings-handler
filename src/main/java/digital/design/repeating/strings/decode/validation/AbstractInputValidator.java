@@ -1,4 +1,4 @@
-package digital.design.repeating.strings.handler.validation;
+package digital.design.repeating.strings.decode.validation;
 
 import lombok.NoArgsConstructor;
 

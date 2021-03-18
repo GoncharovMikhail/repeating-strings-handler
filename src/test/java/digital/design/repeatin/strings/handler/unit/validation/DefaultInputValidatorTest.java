@@ -1,7 +1,7 @@
 package digital.design.repeatin.strings.handler.unit.validation;
 
-import digital.design.repeating.strings.handler.validation.InputValidator;
-import digital.design.repeating.strings.handler.validation.impl.DefaultInputValidator;
+import digital.design.repeating.strings.decode.validation.InputValidator;
+import digital.design.repeating.strings.decode.validation.impl.DefaultInputValidator;
 import org.junit.Test;
 
 import static org.junit.Assert.assertThrows;

@@ -1,7 +1,6 @@
-package digital.design.repeating.strings.handler.validation.impl;
+package digital.design.repeating.strings.decode.validation.impl;
 
-import digital.design.repeating.strings.handler.validation.AbstractInputValidator;
-import lombok.EqualsAndHashCode;
+import digital.design.repeating.strings.decode.validation.AbstractInputValidator;
 import lombok.NoArgsConstructor;
 
 import java.util.EmptyStackException;
@@ -14,7 +13,6 @@ import static java.lang.Character.isDigit;
  * @version 1.0
  */
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class DefaultInputValidator extends AbstractInputValidator {
     private static final String INVALID_INPUT = "Invalid input";
 
@@ -60,7 +58,7 @@ public class DefaultInputValidator extends AbstractInputValidator {
 
     private void checkIfStartsWithOpeningBracket(String inputAsString) {
         if (inputAsString.charAt(0) == '[') {
-            throw new IllegalArgumentException(INVALID_INPUT + " - can't start with '['");
+            throw new IllegalArgumentException(INVALID_INPUT + " - can't start with '['.");
         }
     }
 
@@ -69,7 +67,7 @@ public class DefaultInputValidator extends AbstractInputValidator {
             i++;
         }
         if ((inputAsString.charAt(i) != ']') && (inputAsString.charAt(i) != '[')) {
-            throw new IllegalArgumentException(INVALID_INPUT + " - only brackets can stand after digits");
+            throw new IllegalArgumentException(INVALID_INPUT + " - only brackets can stand after digits.");
         }
     }
 
@@ -91,7 +89,7 @@ public class DefaultInputValidator extends AbstractInputValidator {
          * Each of them contains at least one extra closing bracket, so, when we'll do bracketsStack.pop(), the
          * EmptyStackException will be thrown. */
         if (bracketsStack.isEmpty()) {
-            throw new IllegalArgumentException(INVALID_INPUT + " - at least one extra closing bracket", new EmptyStackException());
+            throw new IllegalArgumentException(INVALID_INPUT + " - at least one extra closing bracket.", new EmptyStackException());
         }
         /* If we find a closing bracket - it closes some opening. Remove an opening bracket from the stack. */
         bracketsStack.pop();
@@ -100,7 +98,7 @@ public class DefaultInputValidator extends AbstractInputValidator {
     private void checkIfNoExtraClosingBrackets(Stack<Character> bracketsStack) {
         /* If stack isn't empty by the of of looping through input - it contains at least one extra opening bracket. */
         if (!bracketsStack.isEmpty()) {
-            throw new IllegalArgumentException(INVALID_INPUT + " - contains " + bracketsStack.size() + "extra brackets.");
+            throw new IllegalArgumentException(INVALID_INPUT + " - contains " + bracketsStack.size() + "extra opening brackets.");
         }
     }
 }

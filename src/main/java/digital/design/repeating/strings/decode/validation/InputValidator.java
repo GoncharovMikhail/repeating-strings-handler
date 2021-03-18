@@ -1,4 +1,4 @@
-package digital.design.repeating.strings.handler.validation;
+package digital.design.repeating.strings.decode.validation;
 
 /**
  * An root interface for validating input.
@@ -18,7 +18,7 @@ public interface InputValidator {
     /**
      * @param input input.
      * @throws NullPointerException iff input == null.
-     * @throws IllegalArgumentException iff input is invalid.
+     * @throws IllegalArgumentException iff input is invalid. Developer defines when it should be thrown.
      */
     void validate(CharSequence input);
 }
